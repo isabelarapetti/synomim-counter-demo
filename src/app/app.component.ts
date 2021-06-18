@@ -1,24 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-export interface ScanedText {
-  word: string;
-  synonyms_found: number;
-}
+let searchResult: string[] = [];
 
-const text: ScanedText[] = [
-  { word: 'Hydrogen', synonyms_found: 1 },
-  { word: 'Helium', synonyms_found: 2 },
-  { word: 'Lithium', synonyms_found: 3 },
-  { word: 'Beryllium', synonyms_found: 4 },
-  { word: 'Boron', synonyms_found: 5 },
-  { word: 'Carbon', synonyms_found: 6 },
-  { word: 'Nitrogen', synonyms_found: 7 },
-  { word: 'Oxygen', synonyms_found: 8 },
-  { word: 'Fluorine', synonyms_found: 9 },
-  { word: 'Neon', synonyms_found: 10 },
-];
+// export interface ScanedText {
+//   word: string;
+//   synonyms_found: number;
+// }
 
+// const text: ScanedText[] = [
+//   { word: 'Table', synonyms_found: 1 },
+//   { word: 'Dictionary', synonyms_found: 2 },
+//   { word: 'Book', synonyms_found: 3 },
+//   { word: 'Library', synonyms_found: 1 },
+// ];
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -26,33 +21,28 @@ const text: ScanedText[] = [
 })
 export class AppComponent implements OnInit {
   title = 'angular-client';
-  dataSource = text;
-
-  // Link to our api, pointing to localhost
-  API = 'http://localhost:3000';
-
-  // Declare empty list of people
-  synonims: any[] = [];
+  dataSource = searchResult;
+  hasResults: boolean = false;
+  URL_API: string = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
-  // Angular 2 Life Cycle event when component has been initialized
   ngOnInit() {
-    this.getScanedText();
+    this.parseText('dog');
   }
 
-  // Add one person to the API
   parseText(text: string) {
-    this.http.post(`${this.API}/scan`, { text }).subscribe(() => {
-      this.getScanedText();
-    });
+    this.http
+      .post(`${this.URL_API}/scan`, { text })
+      .subscribe((result: any) => {
+        console.log(result);
+        searchResult = result;
+        this.hasResults = true;
+      });
   }
 
-  // Get all users from the API
-  getScanedText() {
-    this.http.get(`${this.API}/scantest`).subscribe((synonims: any) => {
-      console.log(synonims);
-      this.synonims = synonims;
-    });
+  clearText() {
+    searchResult = [];
+    this.hasResults = false;
   }
 }
