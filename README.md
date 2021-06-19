@@ -1,4 +1,4 @@
-# synomim-counter-demo
+# synonim-counter-demo
 
 **Build API:**
 
