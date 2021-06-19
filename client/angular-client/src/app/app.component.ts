@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 let searchResult: ScanedText[] = [];
 
@@ -28,17 +29,33 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.parseText('dog');
+    // this.http.get(`${this.URL_API}/`).subscribe(() => {
+    //   console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+    // });
+    this.parseText('dog cat');
   }
 
-  parseText(text: string) {
+  parseText(textToParse: string) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    let body = JSON.stringify({ text: textToParse });
+
+    let url = `${this.URL_API}/parse`;
+
     this.http
-      .post(`${this.URL_API}/parse`, { text })
-      .subscribe((result: any) => {
+      .post(url, body)
+      .pipe(map((data) => {}))
+      .subscribe((result) => {
         console.log(result);
-        searchResult = result;
-        this.hasResults = true;
       });
+    // this.http
+    //   .post(`${this.URL_API}/parse`, { text })
+    //   .subscribe((result: any) => {
+    //     console.log(result);
+    //     searchResult = result;
+    //     this.hasResults = true;
+    //   });
   }
 
   clearText() {

@@ -22,6 +22,7 @@
     "@angular/router": "~12.0.3",
     "hammerjs": "^2.0.8",
     "rxjs": "~6.6.0",
+    "rxjs-compat": "^6.6.7",
     "superagent": "^6.1.0",
     "tslib": "^2.1.0",
     "zone.js": "~0.11.4"
