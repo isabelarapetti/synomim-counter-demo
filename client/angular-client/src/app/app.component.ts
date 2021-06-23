@@ -2,14 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
-let searchResult: ScanedText[] = [];
+//let searchResult: Object = [];
 
 export interface ScanedText {
   word: string;
   synonyms_found: number;
 }
 
-const text: ScanedText[] = [
+const text = [
   { word: 'Table', synonyms_found: 1 },
   { word: 'Dictionary', synonyms_found: 2 },
   { word: 'Book', synonyms_found: 3 },
@@ -22,44 +22,37 @@ const text: ScanedText[] = [
 })
 export class AppComponent implements OnInit {
   title = 'angular-client';
-  dataSource = searchResult;
+  dataSource: ScanedText[] = [];
   hasResults: boolean = false;
   URL_API: string = 'http://localhost:3000';
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    // this.http.get(`${this.URL_API}/`).subscribe(() => {
-    //   console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-    // });
-    this.parseText('dog cat');
+    this.parseText('door clown');
   }
 
   parseText(textToParse: string) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
-    let body = JSON.stringify({ text: textToParse });
+    let body = { text: textToParse };
 
     let url = `${this.URL_API}/parse`;
 
     this.http
       .post(url, body)
-      .pipe(map((data) => {}))
-      .subscribe((result) => {
-        console.log(result);
-      });
-    // this.http
-    //   .post(`${this.URL_API}/parse`, { text })
-    //   .subscribe((result: any) => {
-    //     console.log(result);
-    //     searchResult = result;
-    //     this.hasResults = true;
-    //   });
+      .pipe(
+        map((response) => {
+          this.dataSource = <ScanedText[]>response;
+          this.hasResults = true;
+        })
+      )
+      .subscribe();
   }
 
   clearText() {
-    searchResult = [];
+    this.dataSource.length = 0;
     this.hasResults = false;
   }
 }
