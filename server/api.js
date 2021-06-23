@@ -16,8 +16,11 @@ router.post("/parse", async (req, res) => {
       filteredWords = dedupeWords(filteredWords);
 
       const resultPromises = filteredWords.map(async (word) => {
-        let response = await fetchWordnetSynonims(word);
-        synonimsPerWordList.push(response);
+        let result = await fetchWordnetSynonims(word, filteredWords);
+
+        if (!isSynonimOfPreviousWord(synonimsPerWordList, word)) {
+          synonimsPerWordList.push(result);
+        }
       });
 
       await Promise.all(resultPromises);
@@ -32,6 +35,32 @@ router.post("/parse", async (req, res) => {
     res.end();
   }
 });
+
+async function fetchWordnetSynonims(word, wordsList) {
+  let wordInfo = {
+    word: word,
+    synonyms_found: 0,
+    synonims_list: [],
+  };
+  let fetchedSynonims = [];
+
+  const wordnet = new WordNet();
+
+  const lookupPromise = wordnet.lookupAsync(word);
+  const lookupResults = await lookupPromise;
+
+  lookupResults.forEach(function (result) {
+    fetchedSynonims = fetchedSynonims.concat(result.synonyms);
+  });
+
+  wordInfo.synonims_list = removeExcludedWords(
+    dedupeWords(fetchedSynonims),
+    word
+  );
+  wordInfo.synonyms_found = wordInfo.synonims_list.length;
+
+  return wordInfo;
+}
 
 const convertStringToArray = function (str) {
   return str.trim().split(" ");
@@ -48,25 +77,21 @@ const removeExcludedWords = function (words, excludedWords) {
   });
 };
 
-async function fetchWordnetSynonims(word) {
-  let wordInfo = {
-    word: word,
-    synonyms_found: 0,
-    synonims_list: [],
-  };
+const isSynonimOfPreviousWord = function (wordsList, newWord) {
+  let isSynonimOfPreviousWord = false;
 
-  const wordnet = new WordNet();
-
-  const lookupPromise = wordnet.lookupAsync(word);
-  const lookupResults = await lookupPromise;
-
-  lookupResults.forEach(function (result) {
-    wordInfo.synonyms_found += result.synonyms.length;
-    wordInfo.synonims_list = wordInfo.synonims_list.concat(result.synonyms);
-    //TODO: Add logic if synonim was prevously found in other word
+  //foreach in array of previous synonim lookups
+  wordsList.map((word) => {
+    // if synonim of last lookup is equal to new word
+    if (word.synonims_list.includes(newWord)) {
+      // add to previous element count
+      word.synonyms_found++;
+      // set to true so  its not considered a new entry
+      isSynonimOfPreviousWord = true;
+    }
   });
 
-  return wordInfo;
-}
+  return isSynonimOfPreviousWord;
+};
 
 module.exports = router;
