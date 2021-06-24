@@ -14,7 +14,7 @@ RUN npm install
 # Get app code
 COPY . /app/
 
-EXPOSE 4200
+EXPOSE 3000
 
 # Serve
 CMD ["npm", "start"]

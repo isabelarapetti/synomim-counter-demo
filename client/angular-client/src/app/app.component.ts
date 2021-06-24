@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   title = 'angular-client';
   dataSource: ScanedText[] = [];
   hasResults: boolean = false;
-  URL_API: string = 'http://localhost:3000';
+  URL_API: string = 'http://localhost:4000';
 
   constructor(private http: HttpClient) {}
 

@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "docker:build": "docker build -t server:dev .",
-    "docker:run": "docker run -d --name server -p 3000:3000 server:dev"
+    "docker:run": "docker run -d --name server -p 4000:4000 server:dev"
   },
   "dependencies": {
     "axios": "^0.21.1",

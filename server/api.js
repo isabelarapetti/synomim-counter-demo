@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 var WordNet = require("node-wordnet");
 
+
 router.post("/parse", async (req, res) => {
   try {
     const { text } = req.body;
@@ -11,6 +12,7 @@ router.post("/parse", async (req, res) => {
 
       // turn string into array list
       const words = convertStringToArray(text);
+
       // cleaning rules
       let filteredWords = removeExcludedWords(words, excludedWords);
       filteredWords = dedupeWords(filteredWords);

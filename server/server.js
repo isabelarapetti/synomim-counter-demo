@@ -27,7 +27,7 @@ app.use(function (req, res, next) {
 // Set our api routes
 app.use("/", api);
 
-const port = process.env.PORT || "3000";
+const port = process.env.PORT || "4000";
 app.set("port", port);
 
 const server = http.createServer(app);

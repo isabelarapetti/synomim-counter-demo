@@ -1,0 +1,27 @@
+version: "3.3"
+services:
+  database:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_USER: root
+      MYSQL_DATABASE: synonims_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db/initialsetup.sql
+  server:
+    build: ./server
+    depends_on:
+        - database
+    environment:
+      MYSQL_DATABASE: synonims
+      MYSQL_USER: root
+      MYSQL_PASSWORD: pass
+      MYSQL_HOST: db
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    restart: on-failure

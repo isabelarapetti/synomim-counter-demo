@@ -15,7 +15,9 @@ run:
 
     npm run docker:build
     npm run docker:run
+
 ---
+
 **Build Angular WebApp:**
 
 run:
@@ -31,4 +33,10 @@ run:
 
     npm run docker:build
     npm run docker:run
-     
+
+
+---
+
+**Build DB**
+
+    docker run -p 3306:3306 --name nodejs-mysql -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_DATABASE=synonims_db -d mysql:5.7
