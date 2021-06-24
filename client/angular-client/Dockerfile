@@ -1,5 +1,4 @@
-# Create Node 10 image from dockerhub
-FROM node:10
+FROM node:12-slim
 
 # Create app directory
 RUN mkdir -p /app
@@ -11,10 +10,9 @@ COPY package*.json /app/
 
 RUN npm install
 
-# Get app code
 COPY . /app/
 
-EXPOSE 3000
+EXPOSE 4200
 
 # Serve
 CMD ["npm", "start"]

@@ -2,17 +2,17 @@
 FROM node:6
 
 # Create a directory where our app will be placed
+FROM node:12
+
 RUN mkdir -p /usr/src/app
 
 WORKDIR /usr/src/app
 
 COPY package.json /usr/src/app
 
+COPY . /usr/src/app
 # Install dependecies
 RUN npm install
-
-# Get code from app
-COPY . /usr/src/app
 
 # Expose port 
 EXPOSE 4000

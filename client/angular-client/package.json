@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "docker:build": "docker build -t angular-client:dev .",
-    "docker:run": "docker run -d --name angular-client -p 3000:3000 angular-client:dev"
+    "docker:run": "docker run -d --name angular-client -p 4200:4200 angular-client:dev"
   },
   "private": true,
   "dependencies": {
