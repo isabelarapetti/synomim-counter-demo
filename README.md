@@ -29,11 +29,6 @@ run:
     npm install
     npm run start
 
-**or build with docker:**
-
-    npm run docker:build
-    npm run docker:run
-
 ---
 
 **Build DB**
