@@ -1,11 +1,8 @@
 const express = require("express");
 const http = require("http");
-const bodyParser = require("body-parser");
 const db = require("./Models/dbModel");
 
 const router = express.Router();
-
-router.use(bodyParser.urlencoded({ extended: false }));
 
 const api = require("./api");
 
@@ -13,7 +10,7 @@ const app = express();
 
 // TODO see another json parser
 // Parsers for POST data
-app.use(bodyParser.json());
+app.use(express.json());
 
 // Cross Origin middleware
 app.use(function (req, res, next) {
