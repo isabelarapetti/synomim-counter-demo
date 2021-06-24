@@ -1,6 +1,8 @@
 const express = require("express");
 const http = require("http");
 const bodyParser = require("body-parser");
+const db = require("./Models/dbModel");
+
 const router = express.Router();
 
 router.use(bodyParser.urlencoded({ extended: false }));
@@ -23,6 +25,9 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   next();
 });
+
+//inicializa models
+db.sequelize.sync();
 
 // Set our api routes
 app.use("/", api);

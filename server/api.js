@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
 var WordNet = require("node-wordnet");
+//const dbController = require("./controllers/dbController");
+const db = require("./Models/dbModel");
+const Activity = db.activities;
 
+//router.get("/seq", controller.seq);
 
 router.post("/parse", async (req, res) => {
   try {
@@ -27,7 +31,13 @@ router.post("/parse", async (req, res) => {
 
       await Promise.all(resultPromises);
 
-      // save to db
+      const analysis = JSON.stringify(synonimsPerWordList);
+
+      console.log("---------------------", analysis);
+      await Activity.create({
+        text: text,
+        analysis: analysis,
+      });
 
       res.status(200).json(synonimsPerWordList);
     }
